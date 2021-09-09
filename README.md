@@ -48,9 +48,18 @@ IdM | FreeIPA(DNS、LDAP、CERT) <br> Keycloak| https://www.freeipa.org/ <br> ht
 镜像仓库 | Harbor | https://goharbor.io/ |
 证书管理 | cert-manager <br> FreeIPA <br> OpenSSL | https://cert-manager.io/ | [Rancher - Updating a Private CA Certificate](https://rancher.com/docs/rancher/v2.x/en/installation/resources/update-ca-cert/) <br>[变更 Rancher Server IP 或域名](https://docs.rancher.cn/docs/rancher2/admin-settings/replace-ip-domain/_index/) <br> create_self-signed-cert.sh <br> [Export Certificates and Private Key from a PKCS#12 File with OpenSSL](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/)
 IT 自动化 | Ansible | https://www.ansible.com/ | 
-集群管理 | Rancher | https://www.rancher.cn/ | [推荐架构](https://docs.rancher.cn/docs/rancher2.5/overview/architecture-recommendations/_index/)
 HCI | HarvesterHCI | https://harvesterhci.io/ | [开源HCI软件Harvester beta版深度剖析](https://www.bilibili.com/video/BV1oy4y1M7vZ?from=search&seid=9623238299367553291&spm_id_from=333.337.0.0)
+S3兼容文件存储 | MinIO | https://min.io/ | 
+
+## Kubernetes 相关
+
+功能 | 名称 | 地址 | 参考资源
+-----|-------|-------|-------
+集群管理 | Rancher | https://www.rancher.cn/ | [推荐架构](https://docs.rancher.cn/docs/rancher2.5/overview/architecture-recommendations/_index/)
 轻量集群 | k3s <br> kind <br> k3d | https://k3s.io/ <br> https://k3d.io/ <br> https://kind.sigs.k8s.io/ | [Kubernetes & Rancher 2.5 on a Win 10 laptop with k3d & k3s](https://itnext.io/kubernetes-rancher-2-5-on-your-windows-10-laptop-with-k3d-and-k3s-7404f288342f)
 Helm Hub | ArtifactHub | https://artifacthub.io/ |
 Operator Hub | OperatorHub | https://operatorhub.io/ |
+CNCF | CNCF | https://www.cncf.io/ | https://www.cncf.io/
+Storage | Rook <br> OpenEBS <br> LongHorn | https://rook.io/ <br> https://openebs.io/ <br> https://longhorn.io/ |
+Backup | Kasten | https://www.kasten.io/product/ |
 
