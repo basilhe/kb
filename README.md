@@ -46,7 +46,7 @@ ENTRYPOINT ["python", "/app/extract.py"]
 -----|-------|-------|-------
 IdM | FreeIPA(DNS、LDAP、CERT) <br> Keycloak| https://www.freeipa.org/ <br> https://www.keycloak.org/ | [Centos7中安装和配置FreeIPA](https://cloud.tencent.com/developer/article/1581277)
 镜像仓库 | Harbor | https://goharbor.io/ |
-证书管理 | cert-manager <br> FreeIPA <br> OpenSSL | https://cert-manager.io/ | [Rancher - Updating a Private CA Certificate](https://rancher.com/docs/rancher/v2.x/en/installation/resources/update-ca-cert/) <br>[变更 Rancher Server IP 或域名](https://docs.rancher.cn/docs/rancher2/admin-settings/replace-ip-domain/_index/) <br> create_self-signed-cert.sh
+证书管理 | cert-manager <br> FreeIPA <br> OpenSSL | https://cert-manager.io/ | [Rancher - Updating a Private CA Certificate](https://rancher.com/docs/rancher/v2.x/en/installation/resources/update-ca-cert/) <br>[变更 Rancher Server IP 或域名](https://docs.rancher.cn/docs/rancher2/admin-settings/replace-ip-domain/_index/) <br> create_self-signed-cert.sh <br> [Export Certificates and Private Key from a PKCS#12 File with OpenSSL](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/)
 IT 自动化 | Ansible | https://www.ansible.com/ | 
 集群管理 | Rancher | https://www.rancher.cn/ | [推荐架构](https://docs.rancher.cn/docs/rancher2.5/overview/architecture-recommendations/_index/)
 HCI | HarvesterHCI | https://harvesterhci.io/ | [开源HCI软件Harvester beta版深度剖析](https://www.bilibili.com/video/BV1oy4y1M7vZ?from=search&seid=9623238299367553291&spm_id_from=333.337.0.0)
