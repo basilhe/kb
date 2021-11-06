@@ -44,9 +44,9 @@ ENTRYPOINT ["python", "/app/extract.py"]
 
 功能 | 名称 | 地址 | 参考资源
 -----|-------|-------|-------
-IdM | FreeIPA(DNS、LDAP、CERT) <br> Keycloak| https://www.freeipa.org/ <br> https://www.keycloak.org/ | [Centos7中安装和配置FreeIPA](https://cloud.tencent.com/developer/article/1581277)<br>--allow-zone-overlap 
+IdM | FreeIPA(DNS、LDAP、CERT) <br> Keycloak| https://www.freeipa.org/ <br> https://www.keycloak.org/ | [Centos7中安装和配置FreeIPA](https://cloud.tencent.com/developer/article/1581277) <br>[Using 3rd part certificates for HTTP/LDAP](https://www.freeipa.org/page/Using_3rd_part_certificates_for_HTTP/LDAP)  <br>--allow-zone-overlap 
 镜像仓库 | Harbor | https://goharbor.io/ |
-证书管理 | cert-manager <br> FreeIPA <br> OpenSSL | https://cert-manager.io/ | [Rancher - Updating a Private CA Certificate](https://rancher.com/docs/rancher/v2.x/en/installation/resources/update-ca-cert/) <br>[变更 Rancher Server IP 或域名](https://docs.rancher.cn/docs/rancher2/admin-settings/replace-ip-domain/_index/) <br> create_self-signed-cert.sh <br> [Export Certificates and Private Key from a PKCS#12 File with OpenSSL](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/) <br>[Using 3rd part certificates for HTTP/LDAP](https://www.freeipa.org/page/Using_3rd_part_certificates_for_HTTP/LDAP) 
+证书管理 | cert-manager <br> FreeIPA <br> OpenSSL | https://cert-manager.io/ | [Rancher - Updating a Private CA Certificate](https://rancher.com/docs/rancher/v2.x/en/installation/resources/update-ca-cert/) <br>[变更 Rancher Server IP 或域名](https://docs.rancher.cn/docs/rancher2/admin-settings/replace-ip-domain/_index/) <br> create_self-signed-cert.sh <br> [Export Certificates and Private Key from a PKCS#12 File with OpenSSL](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/) 
 IT 自动化 | Ansible | https://www.ansible.com/ | 
 Infrastructure as Code | TerraForm | https://www.terraform.io/ |
 HCI | HarvesterHCI | https://harvesterhci.io/ | [开源HCI软件Harvester beta版深度剖析](https://www.bilibili.com/video/BV1oy4y1M7vZ?from=search&seid=9623238299367553291&spm_id_from=333.337.0.0)
