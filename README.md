@@ -52,6 +52,7 @@ Infrastructure as Code | TerraForm | https://www.terraform.io/ |
 HCI | HarvesterHCI | https://harvesterhci.io/ | [开源HCI软件Harvester beta版深度剖析](https://www.bilibili.com/video/BV1oy4y1M7vZ?from=search&seid=9623238299367553291&spm_id_from=333.337.0.0)
 S3兼容文件存储 | MinIO | https://min.io/ | 
 知识库 | XWiki | https://www.xwiki.org/ |
+Open Source BI | Metabase | https://www.metabase.com/ |
 
 ## Kubernetes 相关
 
