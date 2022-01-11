@@ -54,6 +54,8 @@ S3兼容文件存储 | MinIO | https://min.io/ |
 知识库 | XWiki | https://www.xwiki.org/ |
 Open Source BI | Metabase | https://www.metabase.com/ |
 GitLab | GitLab | https://www.gitlab.com |
+图表 | PlantUML | https://plantuml.com/ |
+图表 | Krokil | https://kroki.io/ |
 
 ## Kubernetes 相关
 
