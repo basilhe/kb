@@ -56,6 +56,8 @@ Open Source BI | Metabase | https://www.metabase.com/ |
 GitLab | GitLab | https://www.gitlab.com |
 图表 | PlantUML | https://plantuml.com/ |
 图表 | Krokil | https://kroki.io/ |
+nas | Synology | https://www.synology.cn/ |
+nas-on-pc | XPEnology | https://xpenology.club/ |
 
 ## Kubernetes 相关
 
