@@ -53,7 +53,7 @@ HCI | HarvesterHCI | https://harvesterhci.io/ | [开源HCI软件Harvester beta�
 S3兼容文件存储 | MinIO | https://min.io/ | 
 知识库 | XWiki | https://www.xwiki.org/ |
 Open Source BI | Metabase | https://www.metabase.com/ |
-GitLab | GitLab | https://www.gitlab.com |
+GitLab | GitLab | https://www.gitlab.com | [GitLab-EE Xack](https://www.52dzd.com/2021/10/16/gitlab-ee-cracked/)
 图表 | PlantUML | https://plantuml.com/ |
 图表 | Krokil | https://kroki.io/ |
 nas | Synology | https://www.synology.cn/ |
