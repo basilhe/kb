@@ -58,6 +58,7 @@ GitLab | GitLab | https://www.gitlab.com | [GitLab-EE Xack](https://www.52dzd.co
 图表 | Krokil | https://kroki.io/ |
 nas | Synology | https://www.synology.cn/ |
 nas-on-pc | XPEnology | https://xpenology.club/ |
+LoadBalance | HAProxy | http://www.haproxy.org | [Routing to multiple domains over http and https](https://blog.entrostat.com/routing-multiple-domains-using-haproxy-http-and-https-ssl/)
 
 ## Kubernetes 相关
 
