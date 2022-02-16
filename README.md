@@ -65,7 +65,7 @@ LoadBalance | HAProxy | http://www.haproxy.org | [Routing to multiple domains ov
 功能 | 名称 | 地址 | 参考资源
 -----|-------|-------|-------
 集群管理 | Rancher | https://www.rancher.cn/ | [推荐架构](https://docs.rancher.cn/docs/rancher2.5/overview/architecture-recommendations/_index/)
-轻量集群 | k3s <br> kind <br> k3d | https://k3s.io/ <br> https://k3d.io/ <br> https://kind.sigs.k8s.io/ | [Kubernetes & Rancher 2.5 on a Win 10 laptop with k3d & k3s](https://itnext.io/kubernetes-rancher-2-5-on-your-windows-10-laptop-with-k3d-and-k3s-7404f288342f)
+轻量集群 | k3s <br> kind <br> k3d | https://k3s.io/ <br> https://k3d.io/ <br> https://kind.sigs.k8s.io/ | [Kubernetes & Rancher 2.5 on a Win 10 laptop with k3d & k3s](https://itnext.io/kubernetes-rancher-2-5-on-your-windows-10-laptop-with-k3d-and-k3s-7404f288342f) [HTTPS using Letsencrypt and Traefik with k3s](https://sysadmins.co.za/https-using-letsencrypt-and-traefik-with-k3s/)
 Helm Hub | ArtifactHub | https://artifacthub.io/ |
 Operator Hub | OperatorHub | https://operatorhub.io/ |
 CNCF | CNCF | https://www.cncf.io/ | https://www.cncf.io/
