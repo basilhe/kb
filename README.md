@@ -54,7 +54,7 @@ S3兼容文件存储 | MinIO | https://min.io/ |
 知识库 | XWiki | https://www.xwiki.org/ |
 Open Source BI | Metabase | https://www.metabase.com/ |
 GitLab | GitLab | https://www.gitlab.com | [GitLab-EE Xack](https://www.52dzd.com/2021/10/16/gitlab-ee-cracked/)
-图表 | PlantUML | https://plantuml.com/ |
+图表 | PlantUML | https://plantuml.com/ | [Creating UML Database Diagrams for SQL Server](https://www.red-gate.com/simple-talk/databases/sql-server/tools-sql-server/automatically-creating-uml-database-diagrams-for-sql-server/) [SQL2UML](https://github.com/bmrussell/sql2puml)
 图表 | Krokil | https://kroki.io/ |
 nas | Synology | https://www.synology.cn/ |
 nas-on-pc | XPEnology | https://xpenology.club/ |
