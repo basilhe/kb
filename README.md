@@ -59,6 +59,7 @@ GitLab | GitLab | https://www.gitlab.com | [GitLab-EE Xack](https://www.52dzd.co
 nas | Synology | https://www.synology.cn/ |
 nas-on-pc | XPEnology | https://xpenology.club/ |
 LoadBalance | HAProxy | http://www.haproxy.org | [Routing to multiple domains over http and https](https://blog.entrostat.com/routing-multiple-domains-using-haproxy-http-and-https-ssl/)
+|科学上网|Wireguard|https://www.wireguard.com/
 
 ## Kubernetes 相关
 
