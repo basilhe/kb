@@ -438,3 +438,6 @@ $ helm install rancher rancher-latest/rancher \
 
 # HA Cluster 集群安装
 https://www.tuxtips.net/how-to-install-rancher-on-k3s-ha-cluster/
+
+# 其他
+1. 内网操作其实也可以不需要使用证书，将集群搭建在一个独立的网络里面，再搭建一台网关将服务暴露出来即可，在网关上使用证书即可；集群内部的机器操作通过堡垒机做跳板
