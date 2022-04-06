@@ -329,11 +329,13 @@ metadata:
 spec:
   acme:
     # Email address used for ACME registration
-    email: hans@sellerpro.com
+    email: hans@xxxx.com
     server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # production # server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       # Name of a secret used to store the ACME account private key
       name: letsencrypt-dns-wildcard-stag-pk
+      # production # name: letsencrypt-dns-wildcard-prod-private-key
     # Add a single challenge solver, DNS01 using digital ocean
     solvers:
     - dns01:
