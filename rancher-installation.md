@@ -435,3 +435,6 @@ $ helm install rancher rancher-latest/rancher \
   --set bootstrapPassword=admin \
   --set ingress.tls.source=secret
 </code></pre>
+
+# HA Cluster 集群安装
+https://www.tuxtips.net/how-to-install-rancher-on-k3s-ha-cluster/
