@@ -421,9 +421,10 @@ metadata:
   namespace: cattle-system
 spec:
   secretName: tls-rancher-ingress
-  commonName: rancher.rancher.ltd
+  commonName: rancher.ltd
   dnsNames:
-  - rancher.rancher.ltd
+  - rancher.ltd
+  - '*.rancher.ltd'
   issuerRef:
     name: letsencrypt-dns-wildcard-stag
     kind: ClusterIssuer
