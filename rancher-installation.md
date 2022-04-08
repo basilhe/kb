@@ -441,3 +441,55 @@ https://www.tuxtips.net/how-to-install-rancher-on-k3s-ha-cluster/
 
 # 其他
 1. 内网操作其实也可以不需要使用证书，将集群搭建在一个独立的网络里面，再搭建一台网关将服务暴露出来即可，在网关上使用证书即可；集群内部的机器操作通过堡垒机做跳板
+
+# Cluster node 准备
+
+<pre><code>
+下载阿里云的docker yum源,并安装
+# wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+# yum -y install docker-ce-18.09.9-3.el7
+
+# longhorn
+$ yum install iscsi-initiator-utils
+$ systemctl enable iscsid
+$ systemctl start iscsid
+
+启动docker,并设置docker开机自启
+# systemctl start docker
+# systemctl enable docker
+
+cat >  /etc/docker/daemon.json << EOF
+{
+    "exec-opts": ["native.cgroupdriver=systemd"],
+     "registry-mirrors": ["https://fxsdd3k9.mirror.aliyuncs.com"]
+}
+EOF
+
+systemctl daemon-reload
+systemctl restart docker
+
+yum history; yum history undo 1;yum history redo 1;
+docker container rm $(docker container ls -aq)
+
+docker system prune -f
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+docker volume rm $(docker valume ls -q)
+rm -rf /etc/ceph \
+    /etc/cni \
+    /opt/cni \
+    /opt/cke \
+     /etc/kubernetes \
+    /run/secrets/kubernetes.io \
+    /run/calico \
+    /run/flannel \
+    /var/lib/calico \
+    /var/lib/etcd \
+    /var/lib/cni \
+    /var/lib/kubelet \
+    /var/lib/rancher/rke/log \
+    /var/log/containers \
+    /var/log/pods \
+    /var/run/calico
+   
+</code></pre>
