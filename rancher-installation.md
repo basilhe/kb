@@ -378,6 +378,9 @@ data:
   secret-key: MWYyZDFlMmU2N2Rm
 
 接着，就可以创建 secret 了：kubectl create -f secrets.yml。
+
+或者简单地使用命令创建：
+$ kubectl create secret generic alidns-secrets --from-literal="access-token=yourtoken" --from-literal="secret-key=yoursecretkey"
 </code></pre>
 
 # Create certificate
