@@ -47,7 +47,7 @@ ENTRYPOINT ["python", "/app/extract.py"]
 软路由 | 爱快软路由 | https://www.ikuai8.com/product/software/routersystem.html |
 NAS | 群辉 | https://www.synology.cn/zh-cn | 带办公套件 |
 nas-on-pc | XPEnology | https://xpenology.club/ |
-VPN | WireGuard | https://www.wireguard.com/ | 
+VPN | WireGuard | https://www.wireguard.com/ | [Set up a personal VPN in the cloud](https://github.com/trailofbits/algo)
 ERP | Odoo | https://www.odoo.com/ |
 IdM | FreeIPA(DNS、LDAP、CERT) <br> Keycloak| https://www.freeipa.org/ <br> https://www.keycloak.org/ | [Centos7中安装和配置FreeIPA](https://cloud.tencent.com/developer/article/1581277) <br>[Using 3rd part certificates for HTTP/LDAP](https://www.freeipa.org/page/Using_3rd_part_certificates_for_HTTP/LDAP)  <br>--allow-zone-overlap 
 镜像仓库 | Harbor | https://goharbor.io/ |
