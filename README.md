@@ -40,6 +40,14 @@ COPY extract.py /app/
 ENTRYPOINT ["python", "/app/extract.py"]
 </pre>
 
+## 基础设施
+功能 | 名称 | 地址 | 参考资源
+-----|-------|-------|-------
+软路由 | 爱快软路由 | https://www.ikuai8.com/product/software/routersystem.html |
+NAS | 群辉 | https://www.synology.cn/zh-cn | 带办公套件 |
+VPN | WireGuard | https://www.wireguard.com/ | 
+ERP | Odoo | https://www.odoo.com/ |
+
 ## 基础软件
 
 功能 | 名称 | 地址 | 参考资源
@@ -58,7 +66,7 @@ GitLab | GitLab | https://www.gitlab.com | [GitLab-EE Xack](https://www.52dzd.co
 图表 | Krokil | https://kroki.io/ |
 nas | Synology | https://www.synology.cn/ |
 nas-on-pc | XPEnology | https://xpenology.club/ |
-LoadBalance | HAProxy | http://www.haproxy.org | [Routing to multiple domains over http and https](https://blog.entrostat.com/routing-multiple-domains-using-haproxy-http-and-https-ssl/)
+LoadBalance | HAProxy | http://www.haproxy.org | [Routing to multiple domains over http and https](https://blog.entrostat.com/routing-multiple-domains-using-haproxy-http-and-https-ssl/) Kong
 |科学上网|Wireguard|https://www.wireguard.com/
 
 ## Kubernetes 相关
