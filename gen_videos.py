@@ -5,14 +5,20 @@ Created on Tue Jun 14 15:35:40 2022
 @author: hans
 """
 
-from moviepy.editor import TextClip, VideoFileClip, afx, vfx, CompositeVideoClip
+from moviepy.editor import TextClip, VideoFileClip, vfx, CompositeVideoClip
 from os import listdir, makedirs
 from os.path import isfile, join, isdir
 import itertools
 from random import randint
 
 import argparse
-import uuid
+
+import glob
+from csv import reader
+import re
+import pathlib
+
+BP = 'BP'
 
 def emptyDir(path):
     import os, shutil
@@ -27,40 +33,78 @@ def emptyDir(path):
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 def buildTextClip(title, duration=5, width=720):
-    txt_clip = TextClip(title, color='white', fontsize=200, stroke_color='orange', align='center', size=(width,0))
-    return txt_clip.set_duration(duration).set_pos((0,100))
+    txt_clip = TextClip(title, color='white', font='Rubik-Medium', fontsize=200, stroke_color='orange', stroke_width=3.0, align='center', size=(width - 20,0))
+    return txt_clip.set_duration(duration).set_pos((10,500))
 
-def combineVideoClips(video_clips, audio_clip, title):
-    padding = 1.5
-    video_fx_list = [video_clips[0]]
-    # set padding to initial video
+def mergeVideoClips(video_clips, audioClip, audioinfo, title):
+    
+    for i in range(len(video_clips)):
+        video = video_clips[i]
+        duration = audioinfo[i] if i == 0 else audioinfo[i] - audioinfo[i-1]
+        video = video.fx(vfx.speedx, video.duration * 1000 / duration)
+        if (i > 0):
+            video = video.set_start(audioinfo[i-1] / 1000)
+        video_clips[i] = video
 
-    idx = video_clips[0].duration - padding
-    total_duration = video_clips[0].duration
-    for video in video_clips[1:]:
-        video_fx_list.append(video.set_start(idx).crossfadein(padding))
-        idx += video.duration - padding
-        total_duration += video.duration
+    text_clip = buildTextClip(title, width=video_clips[0].w, duration=audioinfo[-1] / 1000)
+    video_clips.append(text_clip)
+    outVideoClip = CompositeVideoClip(video_clips)
+    return ''.join([v.filename for v in video_clips[0:-1]]), outVideoClip.set_audio(audioClip)
 
-    text_clip = buildTextClip(title, width=video_clips[0].w, duration=int(total_duration/12 * 5))
-    video_fx_list.append(text_clip)
-                         
-    outVideoClip = CompositeVideoClip(video_fx_list)
-    if total_duration > 12:
-        outVideoClip = outVideoClip.fx(vfx.speedx, total_duration / 12)
-    audio = afx.audio_loop(afx.audio_fadeout(afx.audio_fadein(audio_clip, 1.0), 1.0),duration=outVideoClip.duration-1)
-    return outVideoClip.set_audio(audio)
+def gen_matrix(items, column, bpcount):
+    matrix = set(itertools.permutations(items, column))
 
-def main():            
+    columns = {}
+    
+    result = []
+    while len(matrix) > 0:
+        item = matrix.pop()
+        if BP not in item:
+            continue
+        
+        found = False
+        for x in range(len(item)):
+            if item[x] == BP:
+                bpfound = 0
+                for p in range(bpcount):
+                    if '%s%d_%d' % (item[x], x, p) in columns:
+                        bpfound += 1
+                if bpfound == bpcount:
+                    found = True
+                    break
+            elif '%s%d' % (item[x], x) in columns:
+                found = True
+                break
+        if not found:
+            item = list(item)
+            for x in range(len(item)):
+                if item[x] == BP:
+                    for p in range(bpcount):
+                        if not '%s%d_%d' % (item[x], x, p) in columns:
+                            columns['%s%d_%d' % (item[x], x, p)] = True
+                            item[x] = '%s%d' % (BP,p)
+                            break
+                else:
+                    columns['%s%d' % (item[x], x)] = True
+            result.append(item)
+    
+    return result
+        
+def main():     
     parser = argparse.ArgumentParser(description="视频混剪")
-    parser.add_argument("video_dir", help="视频目录")
+    parser.add_argument("sku_code", help="SKU编号")
     parser.add_argument("audio_dir", help="音乐目录")
+    parser.add_argument("audio_info", help="音乐卡点文件")
     parser.add_argument("title_file", help="标题文件")
     parser.add_argument("output_dir", help="视频输出目录")
     args = parser.parse_args()
     
-    if not isdir(args.video_dir) or not isdir(args.audio_dir):
+    if not isdir(args.sku_code) or not isdir(args.audio_dir):
         print("视频目录或音乐目录请指定有效目录")
+        return
+    
+    if not isfile(args.audio_info):
+        print("音乐卡点文件不存在")
         return
     
     if not isfile(args.title_file):
@@ -72,40 +116,68 @@ def main():
     else:
         emptyDir(args.output_dir)
         
-    moviepath = args.video_dir
-    moviefiles = [f for f in listdir(moviepath) if isfile(join(moviepath, f))]
+    moviepath = args.sku_code
+    skucode = args.sku_code
+    
+    moviefiles = [f for f in listdir(moviepath) if isfile(join(moviepath, f)) and re.match(r'%sS[0-9]+.*\.' % skucode, f)]
     
     audiopath = args.audio_dir
-    audiofiles = [f for f in listdir(audiopath) if isfile(join(audiopath, f))]
+    audiofiles = glob.glob(join(audiopath, '*.mp4'))
     
     if len(moviefiles) == 0 or len(audiofiles) == 0:
         print("视频目录或音乐目录为空")
         return
 
-    with open(args.title_file) as f:
+    videosuffix = pathlib.Path(moviefiles[0]).suffix
+    bpmoviefiles = [f for f in listdir(moviepath) if isfile(join(moviepath, f)) and re.match(r'%sB[0-9]+.*\.' % skucode, f)]
+
+    if len(bpmoviefiles) == 0:
+        print("未指定爆点视频")
+        return
+    
+    with open(args.title_file, 'r') as f:
         titles = f.readlines()
         if len(titles) == 0:
             print("标题为空")
             return
-    
-    
-    for p in itertools.permutations(moviefiles, 2):
-        videoClip0 = VideoFileClip(join(moviepath, p[0]))
-        videoClip1 = VideoFileClip(join(moviepath, p[1]))
-        
-        audioIdx = randint(0, len(audiofiles) - 1)
-        audioClip = VideoFileClip(join(audiopath, audiofiles[audioIdx]))
-        
-        titleIdx = randint(0, len(titles) - 1)
-        title = titles[titleIdx].replace("\\n", "\n")
-        
-        gen_video = combineVideoClips([videoClip0, videoClip1], audioClip.audio, title)
-        
-        
-        filename = str(uuid.uuid4())
-        print("正在使用视频 %s 和 %s，音乐 %s 和标题 %s 生成" % (p[0], p[1], audiofiles[audioIdx], title))
-        gen_video.write_videofile(join(args.output_dir, '%s.mp4' % filename))
 
+    audiomin = 100
+    audiomax = 0
+    audioinfo = {}
+    with open(args.audio_info, 'r') as data:
+        csv_reader = reader(data)
+            #print(header)
+        for row in csv_reader:
+            # row variable is a list that represents a row in csv
+            name = row[0]
+            points = list(map(int, row[1:]))
+            audioinfo[name] = points
+            if len(points) < audiomin:
+                audiomin = len(points)
+            if len(points) > audiomax:
+                audiomax = len(points)
+    
+    videoidx = 0
+    bpClips = [VideoFileClip(join(moviepath, f)) for f in bpmoviefiles]
+    for name, audioinfo in audioinfo.items():
+        audioClip = VideoFileClip(join(audiopath, '%s.mp4' % name))
+
+        video_count = len(audioinfo)
+        videomatrix = gen_matrix([*moviefiles, BP], video_count, len(bpClips))
+
+        while len(videomatrix) > 0:
+            item = videomatrix.pop()
+            rndClips = [VideoFileClip(join(moviepath, f)) if not f.startswith(BP) else bpClips[int(f.replace(BP, ''))] for f in item]
+        
+            titleIdx = randint(0, len(titles) - 1)
+            title = titles[titleIdx].replace("\\n", "\n")
+        
+            filenamelink, gen_video = mergeVideoClips(rndClips, audioClip.audio, audioinfo, title)
+            filenamelink = filenamelink.replace(join(skucode, skucode), '').replace(videosuffix, '_')[0:-1]
+        
+            filename = '%s%02i_%s.mp4' % (skucode, videoidx, filenamelink)
+            gen_video.write_videofile(join(args.output_dir, filename))
+            videoidx += 1
 
 if __name__ == "__main__":
     main()
