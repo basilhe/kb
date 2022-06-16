@@ -5,9 +5,9 @@ Created on Tue Jun 14 15:35:40 2022
 @author: hans
 """
 
-from moviepy.editor import TextClip, VideoFileClip, vfx, CompositeVideoClip
+from moviepy.editor import TextClip, VideoFileClip, vfx, CompositeVideoClip, ImageClip
 from os import listdir, makedirs
-from os.path import isfile, join, isdir
+from os.path import isfile, join, isdir, basename, normpath
 import itertools
 from random import randint
 
@@ -34,9 +34,9 @@ def emptyDir(path):
 
 def buildTextClip(title, duration=5, width=720):
     txt_clip = TextClip(title, color='white', font='Rubik-Medium', fontsize=200, stroke_color='orange', stroke_width=3.0, align='center', size=(width - 20,0))
-    return txt_clip.set_duration(duration).set_pos((10,500))
+    return txt_clip.set_duration(duration).set_position((10,500))
 
-def mergeVideoClips(video_clips, audioClip, audioinfo, title):
+def mergeVideoClips(video_clips, audioClip, audioinfo, imageClip):
     
     for i in range(len(video_clips)):
         video = video_clips[i]
@@ -45,9 +45,9 @@ def mergeVideoClips(video_clips, audioClip, audioinfo, title):
         if (i > 0):
             video = video.set_start(audioinfo[i-1] / 1000)
         video_clips[i] = video
-
-    text_clip = buildTextClip(title, width=video_clips[0].w, duration=audioinfo[-1] / 1000)
-    video_clips.append(text_clip)
+    x = int((video_clips[0].w - imageClip.size[0])/2)
+    y = int(video_clips[0].h / 3 - imageClip.size[1])
+    video_clips.append(imageClip.set_position((x, y)).set_duration(audioinfo[-1] / 1000))
     outVideoClip = CompositeVideoClip(video_clips)
     return ''.join([v.filename for v in video_clips[0:-1]]), outVideoClip.set_audio(audioClip)
 
@@ -92,11 +92,9 @@ def gen_matrix(items, column, bpcount):
         
 def main():     
     parser = argparse.ArgumentParser(description="视频混剪")
-    parser.add_argument("sku_code", help="SKU编号")
     parser.add_argument("audio_dir", help="音乐目录")
     parser.add_argument("audio_info", help="音乐卡点文件")
-    parser.add_argument("title_file", help="标题文件")
-    parser.add_argument("output_dir", help="视频输出目录")
+    parser.add_argument("sku_code", help="SKU目录")
     args = parser.parse_args()
     
     if not isdir(args.sku_code) or not isdir(args.audio_dir):
@@ -107,17 +105,20 @@ def main():
         print("音乐卡点文件不存在")
         return
     
-    if not isfile(args.title_file):
-        print("标题文件不存在")
-        return
+    skucode = basename(normpath(args.sku_code))
+    moviepath = skucode
+    adwordspath = join(moviepath, '广告语')
+
+    output_dir = "out_%s" % skucode
     
-    if not isdir(args.output_dir):
-        makedirs(args.output_dir)
+    if not isdir(output_dir):
+        makedirs(output_dir)
     else:
-        emptyDir(args.output_dir)
-        
-    moviepath = args.sku_code
-    skucode = args.sku_code
+        emptyDir(output_dir)        
+
+    if not isdir(adwordspath):
+        print("广告语目录不存在")
+        return
     
     moviefiles = [f for f in listdir(moviepath) if isfile(join(moviepath, f)) and re.match(r'%sS[0-9]+.*\.' % skucode, f)]
     
@@ -135,12 +136,12 @@ def main():
         print("未指定爆点视频")
         return
     
-    with open(args.title_file, 'r') as f:
-        titles = f.readlines()
-        if len(titles) == 0:
-            print("标题为空")
-            return
-
+    print('加载广告语图片...')
+    adwordClips = [ImageClip(join(adwordspath, f)) for f in listdir(adwordspath)]
+    adwordcount= len(adwordClips)
+    print('加载 %d 个广告语图片！' % adwordcount)    
+    
+    print('加载音乐卡点信息...')
     audiomin = 100
     audiomax = 0
     audioinfo = {}
@@ -156,28 +157,37 @@ def main():
                 audiomin = len(points)
             if len(points) > audiomax:
                 audiomax = len(points)
-    
+    print('加载音乐卡点信息成功')
     videoidx = 0
+    print('加载爆点视频...')
     bpClips = [VideoFileClip(join(moviepath, f)) for f in bpmoviefiles]
+    print('加载爆点视频成功')
     for name, audioinfo in audioinfo.items():
+        print('加载音频 %s ...' % name)
         audioClip = VideoFileClip(join(audiopath, '%s.mp4' % name))
-
         video_count = len(audioinfo)
+        print('加载音频 %s 成功，%d 个卡点' % (name, video_count))
+        print('生成视频矩阵... %dx%d' % (len(moviefiles) + 1, video_count))
         videomatrix = gen_matrix([*moviefiles, BP], video_count, len(bpClips))
-
+        print('生成视频矩阵成功')
         while len(videomatrix) > 0:
             item = videomatrix.pop()
+            print('加载矩阵视频...')
             rndClips = [VideoFileClip(join(moviepath, f)) if not f.startswith(BP) else bpClips[int(f.replace(BP, ''))] for f in item]
-        
-            titleIdx = randint(0, len(titles) - 1)
-            title = titles[titleIdx].replace("\\n", "\n")
-        
-            filenamelink, gen_video = mergeVideoClips(rndClips, audioClip.audio, audioinfo, title)
+            print('加载矩阵视频成功')
+            adwordIdx = randint(0, adwordcount - 1)
+            imageClip = adwordClips[adwordIdx]
+            print('合成视频...')
+            filenamelink, gen_video = mergeVideoClips(rndClips, audioClip.audio, audioinfo, imageClip)
             filenamelink = filenamelink.replace(join(skucode, skucode), '').replace(videosuffix, '_')[0:-1]
+            print('合成视频成功: %s' % filenamelink)
         
             filename = '%s%02i_%s.mp4' % (skucode, videoidx, filenamelink)
-            gen_video.write_videofile(join(args.output_dir, filename))
+            print('输出视频: %s...' % filename)
+            gen_video.write_videofile(join(output_dir, filename), audio_codec='aac')
+            print('输出视频: %s成功' % filename)
             videoidx += 1
+    print('所有视频合成完毕，一共合成 %d 个视频' % videoidx)
 
 if __name__ == "__main__":
     main()
