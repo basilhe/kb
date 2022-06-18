@@ -6,7 +6,7 @@ Created on Tue Jun 14 15:35:40 2022
 """
 
 from moviepy.editor import TextClip, VideoFileClip, vfx, CompositeVideoClip, ImageClip
-from os import listdir, makedirs
+from os import listdir, makedirs, cpu_count
 from os.path import isfile, join, isdir, basename, normpath
 import itertools
 from random import randint
@@ -49,7 +49,7 @@ def mergeVideoClips(video_clips, audioClip, audioinfo, imageClip):
     y = int(video_clips[0].h / 3 - imageClip.size[1])
     video_clips.append(imageClip.set_position((x, y)).set_duration(audioinfo[-1] / 1000))
     outVideoClip = CompositeVideoClip(video_clips)
-    return ''.join([v.filename for v in video_clips[0:-1]]), outVideoClip.set_audio(audioClip)
+    return ''.join([v.filename for v in video_clips[0:-1]]), outVideoClip.set_audio(audioClip) if audioClip is not None else outVideoClip.without_audio()
 
 def gen_matrix(items, column, bpcount):
     matrix = set(itertools.permutations(items, column))
@@ -93,8 +93,10 @@ def gen_matrix(items, column, bpcount):
 def main():     
     parser = argparse.ArgumentParser(description="视频混剪")
     parser.add_argument("audio_dir", help="音乐目录")
+    parser.add_argument('--remove_audio', action='store_true', help='清除音频')
     parser.add_argument("audio_info", help="音乐卡点文件")
     parser.add_argument("sku_code", help="SKU目录")
+    parser.set_defaults(remove_audio=False)
     args = parser.parse_args()
     
     if not isdir(args.sku_code) or not isdir(args.audio_dir):
@@ -161,10 +163,23 @@ def main():
     videoidx = 0
     print('加载爆点视频...')
     bpClips = [VideoFileClip(join(moviepath, f)) for f in bpmoviefiles]
+        
     print('加载爆点视频成功')
+    videoClips = {}
+    def getVideoClips(filename):
+        if filename in videoClips:
+            print('使用已缓存视频 %s' % filename)
+            return videoClips[filename]
+        videoClip = VideoFileClip(join(moviepath, filename))
+        videoClips[filename] = videoClip
+        print('缓存视频 %s' % filename)
+        return videoClip
+    
+    audio = None
     for name, audioinfo in audioinfo.items():
         print('加载音频 %s ...' % name)
-        audioClip = VideoFileClip(join(audiopath, '%s.mp4' % name))
+        if not args.remove_audio:
+            audio = VideoFileClip(join(audiopath, '%s.mp4' % name)).audio
         video_count = len(audioinfo)
         print('加载音频 %s 成功，%d 个卡点' % (name, video_count))
         print('生成视频矩阵... %dx%d' % (len(moviefiles) + 1, video_count))
@@ -173,18 +188,18 @@ def main():
         while len(videomatrix) > 0:
             item = videomatrix.pop()
             print('加载矩阵视频...')
-            rndClips = [VideoFileClip(join(moviepath, f)) if not f.startswith(BP) else bpClips[int(f.replace(BP, ''))] for f in item]
+            rndClips = [getVideoClips(f) if not f.startswith(BP) else bpClips[int(f.replace(BP, ''))] for f in item]
             print('加载矩阵视频成功')
             adwordIdx = randint(0, adwordcount - 1)
             imageClip = adwordClips[adwordIdx]
             print('合成视频...')
-            filenamelink, gen_video = mergeVideoClips(rndClips, audioClip.audio, audioinfo, imageClip)
+            filenamelink, gen_video = mergeVideoClips(rndClips, audio, audioinfo, imageClip)
             filenamelink = filenamelink.replace(join(skucode, skucode), '').replace(videosuffix, '_')[0:-1]
             print('合成视频成功: %s' % filenamelink)
         
             filename = '%s%02i_%s.mp4' % (skucode, videoidx, filenamelink)
             print('输出视频: %s...' % filename)
-            gen_video.write_videofile(join(output_dir, filename), audio_codec='aac')
+            gen_video.write_videofile(join(output_dir, filename), audio_codec='aac', threads=cpu_count(), verbose=False)
             print('输出视频: %s成功' % filename)
             videoidx += 1
     print('所有视频合成完毕，一共合成 %d 个视频' % videoidx)
