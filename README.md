@@ -62,6 +62,7 @@ GitLab | GitLab | https://www.gitlab.com | [GitLab-EE Xack](https://www.52dzd.co
 图表 | PlantUML | https://plantuml.com/ | [Creating UML Database Diagrams for SQL Server](https://www.red-gate.com/simple-talk/databases/sql-server/tools-sql-server/automatically-creating-uml-database-diagrams-for-sql-server/) [SQL2UML](https://github.com/bmrussell/sql2puml)
 图表 | Krokil | https://kroki.io/ |
 LoadBalance | HAProxy | http://www.haproxy.org | [Routing to multiple domains over http and https](https://blog.entrostat.com/routing-multiple-domains-using-haproxy-http-and-https-ssl/) Kong
+Obsidian | A second brain, for you, forever. | https://obsidian.md/
 
 ## Kubernetes 相关
 
